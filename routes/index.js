@@ -6,6 +6,7 @@ const Docxtemplater = require('docxtemplater');
 
 const fs = require('fs');
 const path = require('path');
+const {shell} = require ('electron');
 //library
 
 
@@ -58,8 +59,8 @@ async function convertDocument(data) {
 
 /* GET home page. */
 const arrNames=[
-    {name : 'date' , text : 'Введите дату(день.месяц.год)', header: 'По состоянию на:'},
-    {name : 'time' , text : 'Введите время(час:минута)'},
+    {name : 'date' , text : 'Введите дату(ФОРМАТ день.месяц.год)', header: 'По состоянию на:'},
+    {name : 'time' , text : 'Введите время(ФОРМАТ час:минута)'},
     {name : 'nameChs' , text : 'Наименование ЧС', header: 'Общие данные'},
     {name : 'classChs' , text : 'Классификация ЧС'},
     {name : 'source' , text : 'Источник ЧС'},
@@ -73,7 +74,7 @@ const arrNames=[
     {name : 'wind' , text : 'Направление и скорость среднего ветра (град., м/с)'},
     {name : 'precipitation' , text : 'Осадки: вид, количество (мм)'},
     {name : 'visibility' , text : 'Видимость (м)'},
-    {name : 'factMeteo' , text : 'Фактические метеоусловия'},
+    {name : 'factMeteo' , text : 'Фактические метеоусловия(Для информационного донесения)'},
     {name : 'allZonePeople' , text : 'Всего в зоне ЧС (чел.)', header : 'Население'},
     {name : 'childZonePeople' , text : 'в том числе дети (чел.)'},
     {name : 'allPeople' , text : 'Всего (чел.)', header: 'Пострадало'},
@@ -89,33 +90,37 @@ const arrNames=[
     {name : 'allMedicalHelp' , text : 'Медицинская помощь оказана в амбулаторных условиях (чел.)'},
     {name : 'medicalHelpChild' , text : 'В том числе дети (чел.)'},
     {name : 'generalEnvironment' , text : 'Общая обстановка'},
-    {name : 'infoAboutDeadAndInjured' , text : 'Сведения о погибших и пострадавших'},
+    {name : 'infoAboutDeadAndInjured' , text : 'Сведения о погибших и пострадавших(Для информационного донесения)'},
     {name : 'nameMeasureProtect' , text : 'Наименование меры по защите населения и территорий от ЧС'},
     {name : 'nameOtherJobs' , text : 'Наименование аварийно-спасательных и других неотложных работ'},
-    {name : 'infoAboutDied' , text : 'Дополнительная информация'},
+    {name : 'infoAboutDied' , text : 'Дополнительная информация(для формы 2 чс, измените при необходимости)', standard: 'ГБУЗ «Славянская ЦРБ» МЗ КК \n' +
+            'г. Славянск-на-Кубани, ул. Бата-рейная, д. 377 \n' + 'Главный врач Просоленко Юрий Александрович \n' + 'раб. тел. 8(86146) 2-20-95, \n' +
+            'моб. тел. 8(918) 453-33-83\n' + 'Морг ГБУЗ «Славянская ЦРБ» МЗ КК \n' +
+            'Начальник патологоанатомическо-го отделения Асадуллин Альфред Френилович \n' + 'тел. патологоанатомического отде-ления 8(86146) 3-29-76\n'},
     {name : 'character' , text : 'Основные характеристики чрезвычайной ситуации (в ' +
-            'зависимости от источника чрезвычайной ситуации)'},
-    {name : 'additionalData' , text : 'Дополнительные данные'},
-    {name : 'additionalMeasures' , text : 'Дополнительные меры'},
+            'зависимости от источника чрезвычайной ситуации)(Редактируйте при необходимости)' ,
+        standard : 'город Славянск-на-Кубани общей площадью более 30 кв. км. и населением свыше ше-стидесяти четырёх тысяч человек, на сегодняшний день является районным центром, значимой единицей в развитии Кубани. Он стоит на важных транспортных артериях, через него проходят автодороги на порты гг.Новороссийск, Темрюк, порт Кавказ. Го-род пересекает железнодорожная магистраль. \n' + 'Славянское городское поселение входит в состав МО Славянский район Краснодар-ского края Южного федерального округа Российской Федерации. На западе поселе-ние граничит с Красноармейским МО, граница проходит по реке Протока,  на севере  - с Прибрежным сельским поселением, на востоке – с Прикубанским и Анастасиев-ским сельскими поселениями, на Юге – с Маевским сельским поселением.\n' + 'Координаты 45°10‘16.88\'\' с.ш., 38°10‘00.40\'\' в.д. \n' + 'Климат: умеренно континентальный; \n' + 'средняя температура января - минус 5°C,  средняя температура июля - плюс 23°C. \n' + 'Количество осадков в год – 600 мм.\n'},
+    {name : 'additionalData' , text : 'Дополнительные данные(Для формы 2ЧС)'},
+    {name : 'additionalMeasures' , text : 'Дополнительные меры(Для формы 3ЧС)'},
 ];
 
 const arrMonths = ['','января', 'февраля', 'марта', 'апреля','мая', 'июня', 'июля', 'августа','сентября', 'октября', 'ноября', 'декабря'];
 
 router.get('/', function(req, res, next) {
-  res.render('index', { arrNames: arrNames });
+    res.render('index', { arrNames: arrNames });
 });
 
 
 router.post('/form-submit', function(req, res, next) {
-  const object = req.body
+    const object = req.body
     object.dateWithMonth = object.date.replace('.'+object.date.split('.')[1]+'.',' '+arrMonths[object.date.split('.')[1]*1]+' ')
-  object.additionalTextInfo=object.generalEnvironment +' '+object.infoAboutDeadAndInjured
-  object.additionalInfo=object.additionalTextInfo+' '+object.nameMeasureProtect+' '+object.nameOtherJobs
-  convertDocument (object).then (() => {
-      const {shell} = require('electron')
-      shell.showItemInFolder(pathToSave + nameDir)
-      res.send ('Сохранено в папку' + pathToSave + nameDir + '<br> Необходимо переименовать');
-  })
+    object.additionalTextInfo=object.generalEnvironment +' '+object.infoAboutDeadAndInjured
+    object.additionalInfo=object.additionalTextInfo+' '+object.nameMeasureProtect+' '+object.nameOtherJobs
+    convertDocument (object).then (() => {
+        const {shell} = require('electron')
+        shell.showItemInFolder(pathToSave + nameDir)
+        res.send ('Сохранено в папку' + pathToSave + nameDir + '<br> Необходимо переименовать');
+    })
 });
 
 
