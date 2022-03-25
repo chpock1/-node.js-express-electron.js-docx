@@ -1,0 +1,11 @@
+.blockSelect{
+	border: 1px solid black;
+	width: 200px;
+	height: auto;
+	border-radius: 10px;
+	text-align: center;
+	position: relative;
+	padding: 20px;
+}
+.blockSelect h2{
+}

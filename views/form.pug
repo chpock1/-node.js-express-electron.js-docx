@@ -1,0 +1,20 @@
+extends layout
+block content
+	.container
+		.form-style-6
+			h1 Введите данные для формирования отчета
+			p Каждое поле обязательно к заполнению
+			form.border.border-light.p-5(method="post" action="/form-submit" id="clientform")
+				.form-group
+					div
+						input(type="checkbox" id="training" name="training")
+						label(for="training") Постаьте галочку если это тренировка
+						br
+						each i in arrNames
+							if i.header
+								h1=i.header
+							label(for= i.name)=i.text
+							textarea(class="form-control" id= i.name placeholder= i.text rows="5"
+							name= i.name )=i.standard
+							br
+					button(type="submit" class="btn btn-primary" id="send") Сформировать отчёт

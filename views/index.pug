@@ -1,21 +1,8 @@
-doctype html
-html
-	head
-		title Введите данные для формирования отчета
-		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
-	body
-		.container
-			.form-style-6
-				h1 Введите данные для формирования отчета
-				p Каждое поле обязательно к заполнению
-				form.border.border-light.p-5(method="post" action="/form-submit" id="clientform")
-					.form-group
-						div
-							each i in arrNames
-								if i.header
-									h1=i.header
-								label(for= i.name)=i.text
-								textarea(class="form-control" id= i.name placeholder= i.text
-									name= i.name )=i.standard
-								br
-						button(type="submit" class="btn btn-primary" id="send") Сформировать отчёт
+extends layout
+block content
+	.row
+		h1.col-12.text-center Выберите ЧС
+		a.blockSelect.col-6(href="/subCat/1")
+			h2 Техногенные
+		a.blockSelect.col-6(href="/subCat/2")
+			h2 Природные

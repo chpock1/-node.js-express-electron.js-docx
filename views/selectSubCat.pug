@@ -1,0 +1,9 @@
+extends layout
+block content
+	h2 Выберите шаблон
+	br
+	.row
+		each i in arrSubCat
+			a.blockSelect.col-12(href="/cat/"+i.id)
+				h2=i.name
+			br
