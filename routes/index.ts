@@ -5,14 +5,13 @@ const Docxtemplater = require('docxtemplater');
 const fs = require('fs');
 const path = require('path');
 const {shell} = require ('electron');
-import {arrFilesName,arrNames,arrSubCat,arrMonths} from '../data/data'
+import {arrFilesName,arrNames,arrSubCat,arrMonths,pathToSave} from '../data/data'
 
 arrFilesName.forEach(name=>{
     const content = fs.readFileSync(path.resolve('\\\\192.168.1.4\\Docs\\ЕДДС\\7 Тренировки\\программа по созданию\\шаблоны', name.name), 'binary');
     name.zip = (new PizZip(content))
 
 })
-const pathToSave:string = '\\\\192.168.1.4\\Docs\\ЕДДС\\7 Тренировки\\'+new Date().getFullYear()+'\\'
 const nameDir:string = 'Новая тренировка созданная программой'
 async function convertDocument(data:{[key:string]:string}) {
     fs.mkdir(path.join(pathToSave, nameDir), ():void => {
