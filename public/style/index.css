@@ -9,3 +9,6 @@
 }
 .blockSelect h2{
 }
+select {
+	width: 100%;
+}

@@ -1,9 +1,10 @@
 extends layout
 block content
+	a(href="/") Назад
 	h2 Выберите шаблон
 	br
 	.row
 		each i in arrSubCat
-			a.blockSelect.col-12(href="/cat/"+i.id)
+			a.blockSelect.col-12(href="/cat/"+numb+"/"+i.id)
 				h2=i.name
 			br

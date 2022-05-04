@@ -1,5 +1,6 @@
 extends layout
 block content
+	a(href="/subCat/"+numb) Назад
 	.container
 		.form-style-6
 			h1 Введите данные для формирования отчета
@@ -14,7 +15,24 @@ block content
 							if i.header
 								h1=i.header
 							label(for= i.name)=i.text
-							textarea(class="form-control" id= i.name placeholder= i.text rows="5"
-							name= i.name )=i.standard
+							if i.type==='multi_select'
+								select.js-example-basic-multiple(id= i.name multiple="multiple" name="states[]")
+									each group in i.data_select
+										optgroup(label=group.group)
+										each opt in group.data
+											option(value=opt.people)=opt.name
+											//нужно сделать чтобы при выборе города
+											// в селекте аоявлялся 2 инпута которые заполнятся данными(people,
+											//child), и еще один инпут с списком городов через запятую и id=locality
+											// для количества детей убрать из даты поля и вписать сюда с теми же айди
+							else
+								textarea(class="form-control" id= i.name placeholder= i.text rows="5" name= i.name )=i.standard
 							br
+
+						script.
+							$(document).ready (function () {
+								setTimeout(()=>{
+									$('.js-example-basic-multiple').select2();
+								})
+							});
 					button(type="submit" class="btn btn-primary" id="send") Сформировать отчёт

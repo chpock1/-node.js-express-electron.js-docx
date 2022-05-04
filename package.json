@@ -6,20 +6,21 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "buildTS": "npx tsc",
+    "startDev": "node app.js",
   },
   "repository": "https://github.com/majikarp/node-desktop-app-template",
   "keywords": [],
   "author": "GitHub",
   "license": "CC0-1.0",
   "dependencies": {
+    "@types/node": "^17.0.31",
     "bootstrap": "4.2.1",
     "docxtemplater": "^3.16.3",
     "ejs": "^3.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "express": "^4.17.1",
-    "jquery": "3.3.1",
-    "nodemon": "^2.0.2",
     "pizzip": "^3.0.6",
     "pug": "^3.0.2"
   },
@@ -30,8 +31,11 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "browser-sync": "2.26.3",
+    "concurrently": "^7.1.0",
     "electron": "^4.2.12",
-    "gulp": "4.0.0"
+    "gulp": "4.0.0",
+    "nodemon": "^2.0.16",
+    "typescript": "^4.6.4"
   },
   "config": {
     "forge": {
